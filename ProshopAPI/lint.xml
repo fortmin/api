@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="InlinedApi">
+        <ignore path="src/com/fortmin/proshopapi/ble/ProShopBleMgr.java" />
+        <ignore path="src/com/fortmin/proshopapi/nfc/ProShopNFCMgr.java" />
+    </issue>
+</lint>
