@@ -1,8 +1,10 @@
 package com.fortmin.proshopapi;
 
 import java.net.URISyntaxException;
+import java.util.LinkedList;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.nfc.NdefMessage;
@@ -177,6 +179,18 @@ public class ProShopMgr {
 		ProShopBleMgr bleMgr = new ProShopBleMgr();
 		return bleMgr.bluetoothHabilitado(context);
 	}
+	
+	/* 
+	 * Obtener una lista de dispositivos Bluetooth LE detectados
+	 * Ademas del contexto se le pasa un boolean para ver si se quiere obtener solo dispositivos BLE
+	 */
+	public LinkedList<BluetoothDevice> obtenerDispositivosBluetooth(Context context, boolean filtrarLe) {
+		log("obtenerDispositivosBluetooth");				
+		ProShopBleMgr bleMgr = new ProShopBleMgr();
+		return bleMgr.obtenerDispositivosBluetooth(context, filtrarLe);
+	}
+	
+	
 
 	/*
 	 * Tabla de referencia entre API Level y Version Codes:

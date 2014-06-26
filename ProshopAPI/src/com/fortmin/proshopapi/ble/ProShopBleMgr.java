@@ -1,6 +1,11 @@
 package com.fortmin.proshopapi.ble;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Set;
+
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -45,5 +50,36 @@ public class ProShopBleMgr {
 		}
 		return habilitado;
 	}
+	
+	/* 
+	 * Obtener una lista de dispositivos Bluetooth LE detectados
+	 * Ademas del contexto se le pasa un boolean para ver si se quiere obtener solo dispositivos BLE
+	 */
+	public LinkedList<BluetoothDevice> obtenerDispositivosBluetooth(Context context, boolean filtrarLe) {
+		LinkedList<BluetoothDevice> lbtds = new LinkedList<BluetoothDevice>();
+		BluetoothDevice btd;
+		if (bluetoothHabilitado(context)) {
+			BluetoothAdapter bAdapter = BluetoothAdapter.getDefaultAdapter();
+			Set<BluetoothDevice> bdevs = bAdapter.getBondedDevices();
+			if (bdevs != null) {
+				Iterator<BluetoothDevice> ibdevs = bdevs.iterator();
+				if (ibdevs.hasNext()) {
+					btd = ibdevs.next();
+					if (filtrarLe) {
+						if (btd.getType() == BluetoothDevice.DEVICE_TYPE_LE || btd.getType() == BluetoothDevice.DEVICE_TYPE_DUAL)
+							lbtds.addLast(btd);
+					}
+					else
+						lbtds.addLast(btd);
+				}
+			}
+		}
+		return lbtds;
+	}
+	
+	/*
+	 * 
+	 */
+	
 
 }
