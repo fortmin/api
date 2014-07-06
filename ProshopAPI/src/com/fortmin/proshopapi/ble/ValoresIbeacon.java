@@ -90,12 +90,9 @@ public int darValorRssi(){
 	return rssi;
 }
 public void setValorRssi(int valor){
-	if (rssi==0)
 	 rssi=valor;
-	else {
-		int promedio=(valor+rssi)/2;
-		rssi=promedio;
-	}
+	
+	
 }
 
 public int getMajor() {
@@ -147,7 +144,7 @@ public boolean estaCalibrado(){
 	return this.calibrado;
 }
 public boolean clienteCerca(){
-	return (Math.abs(rssi) <=distancia);
+	return (Math.abs(rssi)<distancia);
 }
 public float calculateAccuracy() {
 	 
