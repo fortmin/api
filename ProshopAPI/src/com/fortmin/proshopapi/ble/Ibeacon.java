@@ -226,4 +226,8 @@ public class Ibeacon {
     public boolean clienteCerca(){
     	return valores.clienteCerca();
     }
+    public boolean estaBeaconCalibrado(){
+    	return valores.estaCalibrado();
+    }
+    
 }
