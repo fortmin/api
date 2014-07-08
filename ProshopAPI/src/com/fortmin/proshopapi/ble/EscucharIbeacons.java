@@ -2,8 +2,6 @@ package com.fortmin.proshopapi.ble;
 
 import java.util.ArrayList;
 
-import com.fortmin.proshopapi.ListaIbeacon;
-
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;

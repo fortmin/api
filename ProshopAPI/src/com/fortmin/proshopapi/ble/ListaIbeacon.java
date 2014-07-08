@@ -1,4 +1,4 @@
-package com.fortmin.proshopapi;
+package com.fortmin.proshopapi.ble;
 
 import java.util.ArrayList;
 import com.fortmin.proshopapi.ble.Ibeacon;
