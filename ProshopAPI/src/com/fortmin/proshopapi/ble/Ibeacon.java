@@ -1,5 +1,9 @@
 package com.fortmin.proshopapi.ble;
 
+import java.util.ArrayList;
+
+import com.fortmin.proshopapi.ListaIbeacon;
+
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -17,8 +21,9 @@ public class Ibeacon {
     private BluetoothDevice  mBluetoothDevice = null;
     private final Handler mTimerHandler = new Handler();
     private boolean mTimerEnabled = false;
-    private ValoresIbeacon valores= new ValoresIbeacon("",0);
-	/* defines (in milliseconds) how often RSSI should be updated */
+    private ListaIbeacon ibeacons;
+    
+	/* updated de RSSI en milisegundos*/
     private static final int RSSI_UPDATE_TIME_INTERVAL = 15000; // 15 seconds
 
     /* callback object through which we are returning results to the caller */
@@ -31,6 +36,7 @@ public class Ibeacon {
     public Ibeacon(Activity parent, BleWrapperUiCallbacks callback) {
     	this.mParent =parent;
     	mUiCallback = callback;
+    	ibeacons=ListaIbeacon.getListaBeacons();
     	if(mUiCallback == null) {
 			mUiCallback = NULL_CALLBACK;
 		}
@@ -89,9 +95,6 @@ public class Ibeacon {
 	}
 	
 	
-	
-	
-	
 	/* stops current scanning */
 	public void stopScanning() {
 		mBluetoothAdapter.stopLeScan(mDeviceFoundCallback);	
@@ -117,11 +120,6 @@ public class Ibeacon {
     }
 
   
-    
-   
-
-  
-
     /* request new RSSi value for the connection*/
     public void readPeriodicalyRssiValue(final boolean repeat) {
     	mTimerEnabled = repeat;
@@ -155,79 +153,26 @@ public class Ibeacon {
     public void stopMonitoringRssiValue() {
     	readPeriodicalyRssiValue(false);
     }
-    
   
-    
-  
-    
-  
-
-  
-
-    
-    
-   
-
-   
-    
-   
-    
-    /* defines callback for scanning results */
-    /*
-    private final BluetoothAdapter.LeScanCallback mDeviceFoundCallback = new BluetoothAdapter.LeScanCallback() {
-        @Override
-        public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
-        	mUiCallback.uiDeviceFound(device, rssi, scanRecord);
-        }
-    };	   */
-    
  
     private final BluetoothAdapter.LeScanCallback mDeviceFoundCallback = new BluetoothAdapter.LeScanCallback() {
         @Override
         public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
-        	
+        	// en cada lectura guardo el rssi y todos los parametros del ibeacon
+        	ValoresIbeacon valores= new ValoresIbeacon("",0);
         	valores.setValor_nombre(device.getName());
         	valores.setValorRssi(rssi);
         	valores.setScanRecord(scanRecord);
+        	ibeacons.add(valores);
         	
     		
         }
     };
-    
-    public String darNombreBeacon(){
-    	return valores.getValor_nombre();
+    public ArrayList <ValoresIbeacon> mostrarListaBeaconsCercanos(){
+    	return ibeacons.IbeaconsEncendidos();
+    	
     }
     
-    public int darRssiBeacon(){
-    	return valores.darValorRssi();
-    }
-    
-    public int darMinor(){
-    	return valores.getMinor();
-    }
-    
-    public int darMajor(){
-    	return valores.getMajor();
-    }
-    
-    public String getProximityUuid(){
-    	return valores.getProximityUuid();
-    }
-    
-    public void calibrarBeacon(int rssi_ibeacon){
-    	valores.setCalibracion(rssi_ibeacon);
-    }
-    public float darDistancia(){
-    	return valores.getDistancia();
-    }
-    public double getTxPower(){
-    	return valores.getTxPower();
-    }
-    public boolean clienteCerca(){
-    	return valores.clienteCerca();
-    }
-    public boolean estaBeaconCalibrado(){
-    	return valores.estaCalibrado();
-    }
+   
     
 }

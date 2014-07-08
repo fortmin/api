@@ -38,7 +38,8 @@ public void setScanRecord(byte[] scanRecord) {
 	minor = (scanRecord[startByte+25] & 0xff) * 0x100 + (scanRecord[startByte+26] & 0xff);
 	txPower = (scanRecord[startByte+27] & 0xff) * 0x100 + (scanRecord[startByte+28] & 0xff);; // this one is signed
 	byte[] uuid_ent= new byte[16];
-	uuid_ent[0]=scanRecord[9];
+	System.arraycopy(scanRecord, 9, uuid_ent, 0, 16);
+	/*uuid_ent[0]=scanRecord[9];
 	uuid_ent[1]=scanRecord[10];
 	uuid_ent[2]=scanRecord[11];
 	uuid_ent[3]=scanRecord[12];
@@ -53,7 +54,7 @@ public void setScanRecord(byte[] scanRecord) {
 	uuid_ent[12]=scanRecord[21];
 	uuid_ent[13]=scanRecord[22];
 	uuid_ent[14]=scanRecord[23];
-	uuid_ent[15]=scanRecord[24];
+	uuid_ent[15]=scanRecord[24];*/
 	UUID uuid=UUID.nameUUIDFromBytes(uuid_ent);
 	this.proximityUuid=uuid.toString();
 }
