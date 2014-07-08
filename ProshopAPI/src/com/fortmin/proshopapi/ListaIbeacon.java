@@ -98,6 +98,10 @@ public ArrayList<ValoresIbeacon> IbeaconsEncendidos(){
 	}
 	return beacons;
 	}
-    
+
+public void calibrarBeacon(ValoresIbeacon ibeacon){
+	ibeacon.setCalibracion(ibeacon.getRssi());
+	update(ibeacon);
+}
 	
 }
