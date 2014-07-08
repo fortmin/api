@@ -1,7 +1,5 @@
 package com.fortmin.proshopapi.ble;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -9,7 +7,6 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Handler;
-import android.util.Log;
 
 public class EscucharIbeacons {
 	private Activity mParent = null;    
@@ -45,10 +42,23 @@ public class EscucharIbeacons {
     	
     }
     
-    public BluetoothManager           getManager() { return mBluetoothManager; }
-    public BluetoothAdapter           getAdapter() { return mBluetoothAdapter; }
-    public BluetoothDevice            getDevice()  { return mBluetoothDevice; }
-    public boolean                    isConnected() { return mConnected; }
+    public BluetoothManager getManager() 
+    {
+    	return mBluetoothManager; 
+    }
+    
+    public BluetoothAdapter getAdapter() 
+    {
+    	return mBluetoothAdapter; 
+    }
+    
+    public BluetoothDevice getDevice(){
+    	return mBluetoothDevice;
+    }
+    
+    public boolean isConnected() {
+    	return mConnected;
+    }
 
 	/* run test and check if this device has BT and BLE hardware available */
 	public boolean checkBleHardwareAvailable() {

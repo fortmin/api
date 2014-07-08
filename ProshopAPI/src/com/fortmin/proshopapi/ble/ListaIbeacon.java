@@ -60,8 +60,8 @@ public boolean IgualesBeacon(Ibeacon b1, Ibeacon b2){
 	String uuid1,uuid2;
 	boolean iguales_uuid,iguales_major,iguales_minor;
 	int major1,major2,minor1,minor2;
-	uuid1=b1.getValor_uuid();
-	uuid2=b2.getValor_uuid();
+	uuid1=b1.getProximityUuid();
+	uuid2=b2.getProximityUuid();
 	major1=b1.getMajor();
 	major2=b2.getMajor();
 	minor1=b1.getMinor();

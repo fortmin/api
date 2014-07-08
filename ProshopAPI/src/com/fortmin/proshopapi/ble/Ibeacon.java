@@ -3,20 +3,17 @@ package com.fortmin.proshopapi.ble;
 import java.util.UUID;
 
 
-//clase auxiliar creada por Fortti	
+
 
 public class Ibeacon {
-  private static float A=100; // 1 metro expresado en centimetros para calculo de distancia	
-  private static float distancia_cercana=200; //definición de ambito de cobertura cercana son 200 cm
   private String valor_nombre;
-  private String valor_uuid;
-  private int rssi,rssi_metro,rssi_ibeacon;
+  private int rssi,rssi_metro;
   private byte[] scanRecord;
   private int major, minor;
   double txPower;
   private  String proximityUuid;
   private boolean calibrado;
-  private float ni,distancia;
+  private float distancia;
   private final int startByte=2;// para obtener los valores de major y minor
   
   public int getRssi() {
@@ -66,13 +63,9 @@ Ibeacon(String nombre, int v_rssi){
 	  
   }
 
-public String getValor_uuid() {
-	return valor_uuid;
-}
 
-public void setValor_uuid(String valor_uuid) {
-	this.valor_uuid = valor_uuid;
-}
+
+
 
 public String getValor_rssi() {
 	return String.valueOf(rssi);
@@ -100,17 +93,13 @@ public int getMajor() {
 	return major;
 }
 
-public void setMajor(int major) {
-	this.major = major;
-}
+
 
 public int getMinor() {
 	return minor;
 }
 
-public void setMinor(int minor) {
-	this.minor = minor;
-}
+
 
 public double getTxPower() {
 	return txPower;
@@ -131,7 +120,6 @@ public void setCalibracion(int rssi_ibeacon){
 	// potencia es el valor de rssi captado por el movil  a la distancia de 1 metro
 	// rssi_ibeacon es el rssi que tiene el dispositivo que transmite
 	
-	this.rssi_ibeacon=rssi_ibeacon;
 	this.distancia=Math.abs(rssi_ibeacon);// tomo como referencia el rssi a la distancia requerida
 	this.calibrado=true;
 	//this.ni=(float) ((-rssi_ibeacon-rssi_metro)/(10*Math.log10(A)));
