@@ -5,7 +5,7 @@ import java.util.UUID;
 
 //clase auxiliar creada por Fortti	
 
-public class ValoresIbeacon {
+public class Ibeacon {
   private static float A=100; // 1 metro expresado en centimetros para calculo de distancia	
   private static float distancia_cercana=200; //definición de ambito de cobertura cercana son 200 cm
   private String valor_nombre;
@@ -59,7 +59,7 @@ public void setScanRecord(byte[] scanRecord) {
 	this.proximityUuid=uuid.toString();
 }
 
-ValoresIbeacon(String nombre, int v_rssi){
+Ibeacon(String nombre, int v_rssi){
 	  valor_nombre=nombre;
 	  this.rssi=v_rssi;
 	  this.calibrado=false;

@@ -1,22 +1,22 @@
 package com.fortmin.proshopapi;
 
 import java.util.ArrayList;
-import com.fortmin.proshopapi.ble.ValoresIbeacon;
+import com.fortmin.proshopapi.ble.Ibeacon;
 
 public class ListaIbeacon {
 	/**objeto Singleton*/
 	private static ListaIbeacon ListaSingleton= new ListaIbeacon();
-	private ArrayList<ValoresIbeacon> listaBeacons; 
+	private ArrayList<Ibeacon> listaBeacons; 
 	private int elementos=0;
 	
 private ListaIbeacon	(){
-	listaBeacons=new ArrayList<ValoresIbeacon>();
+	listaBeacons=new ArrayList<Ibeacon>();
 	
 }
 public static ListaIbeacon getListaBeacons() {
 	 return ListaSingleton;
 	}
-public void add(ValoresIbeacon ibeacon){
+public void add(Ibeacon ibeacon){
 	if (!estaIbeacon(ibeacon)){
 	 listaBeacons.add(elementos,ibeacon);
 	 elementos++;
@@ -24,8 +24,8 @@ public void add(ValoresIbeacon ibeacon){
 	else
 	 update(ibeacon);	
 }
-public void remove(ValoresIbeacon ibeacon){
-	ValoresIbeacon aux_beacon;
+public void remove(Ibeacon ibeacon){
+	Ibeacon aux_beacon;
 	int indice=0;
 	aux_beacon=listaBeacons.get(indice);
 	boolean iguales=false;
@@ -40,8 +40,8 @@ public void remove(ValoresIbeacon ibeacon){
 	 	listaBeacons.remove(indice);
 	}
 }
-public void update(ValoresIbeacon ibeacon){
-	ValoresIbeacon aux_beacon;
+public void update(Ibeacon ibeacon){
+	Ibeacon aux_beacon;
 	int indice=0;
 	aux_beacon=listaBeacons.get(indice);
 	boolean iguales=false;
@@ -56,7 +56,7 @@ public void update(ValoresIbeacon ibeacon){
 	 	listaBeacons.set(indice, ibeacon);
 	}
 }
-public boolean IgualesBeacon(ValoresIbeacon b1, ValoresIbeacon b2){
+public boolean IgualesBeacon(Ibeacon b1, Ibeacon b2){
 	String uuid1,uuid2;
 	boolean iguales_uuid,iguales_major,iguales_minor;
 	int major1,major2,minor1,minor2;
@@ -74,8 +74,8 @@ public boolean IgualesBeacon(ValoresIbeacon b1, ValoresIbeacon b2){
 	
 }
 
-public boolean estaIbeacon(ValoresIbeacon ibeacon){
-	ValoresIbeacon aux_beacon;
+public boolean estaIbeacon(Ibeacon ibeacon){
+	Ibeacon aux_beacon;
 	int indice=0;
 	aux_beacon=listaBeacons.get(indice);
 	boolean iguales=false;
@@ -88,9 +88,9 @@ public boolean estaIbeacon(ValoresIbeacon ibeacon){
 	return iguales;
 }
 
-public ArrayList<ValoresIbeacon> IbeaconsEncendidos(){
+public ArrayList<Ibeacon> IbeaconsEncendidos(){
 	int indice=0;
-	ArrayList<ValoresIbeacon> beacons= new ArrayList<ValoresIbeacon>();
+	ArrayList<Ibeacon> beacons= new ArrayList<Ibeacon>();
 	while (indice<=elementos){
 		if(listaBeacons.get(indice).clienteCerca())
 			beacons.add(listaBeacons.get(indice));
@@ -99,7 +99,7 @@ public ArrayList<ValoresIbeacon> IbeaconsEncendidos(){
 	return beacons;
 	}
 
-public void calibrarBeacon(ValoresIbeacon ibeacon){
+public void calibrarBeacon(Ibeacon ibeacon){
 	ibeacon.setCalibracion(ibeacon.getRssi());
 	update(ibeacon);
 }

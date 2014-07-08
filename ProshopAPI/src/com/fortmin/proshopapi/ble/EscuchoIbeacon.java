@@ -159,7 +159,7 @@ public class EscuchoIbeacon {
         @Override
         public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
         	// en cada lectura guardo el rssi y todos los parametros del ibeacon
-        	ValoresIbeacon valores= new ValoresIbeacon("",0);
+        	Ibeacon valores= new Ibeacon("",0);
         	valores.setValor_nombre(device.getName());
         	valores.setValorRssi(rssi);
         	valores.setScanRecord(scanRecord);
