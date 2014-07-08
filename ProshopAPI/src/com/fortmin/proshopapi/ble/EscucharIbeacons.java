@@ -13,7 +13,7 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.util.Log;
 
-public class EscuchoIbeacon {
+public class EscucharIbeacons {
 	private Activity mParent = null;    
 	private boolean mConnected = false;
 	private BluetoothManager mBluetoothManager = null;
@@ -33,7 +33,7 @@ public class EscuchoIbeacon {
     
    
     /* creates BleWrapper object, set its parent activity and callback object */
-    public EscuchoIbeacon(Activity parent, BleWrapperUiCallbacks callback) {
+    public EscucharIbeacons(Activity parent, BleWrapperUiCallbacks callback) {
     	this.mParent =parent;
     	mUiCallback = callback;
     	ibeacons=ListaIbeacon.getListaBeacons();
@@ -41,7 +41,7 @@ public class EscuchoIbeacon {
 			mUiCallback = NULL_CALLBACK;
 		}
     }
-    public EscuchoIbeacon(Activity parent){
+    public EscucharIbeacons(Activity parent){
     	this.mParent =parent;
     	//mUiCallback=new BleWrapperUiCallbacks.Null();
     	
