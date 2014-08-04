@@ -1,5 +1,7 @@
 package com.fortmin.proshopapi.ble;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -16,8 +18,9 @@ public class EscucharIbeacons {
     private BluetoothDevice  mBluetoothDevice = null;
     private final Handler mTimerHandler = new Handler();
     private boolean mTimerEnabled = false;
+    private int valor_rssi;
     private ListaIbeacon ibeacons;
-    
+    private Ibeacon ibeacon;
 	/* updated de RSSI en milisegundos*/
     private static final int RSSI_UPDATE_TIME_INTERVAL = 15000; // 15 seconds
 
@@ -39,9 +42,20 @@ public class EscucharIbeacons {
     public EscucharIbeacons(Activity parent){
     	this.mParent =parent;
     	//mUiCallback=new BleWrapperUiCallbacks.Null();
+    	 ibeacon= new Ibeacon("",0);
+    	 if(mUiCallback == null) {
+  			mUiCallback = NULL_CALLBACK;
+    	 }
     	
     }
-    
+    public EscucharIbeacons(){
+    	//this.mParent =parent;
+    	//mUiCallback=new BleWrapperUiCallbacks.Null();
+    	 ibeacon= new Ibeacon("",0);
+    	 if(mUiCallback == null) {
+   			mUiCallback = NULL_CALLBACK;
+     	 }
+    }
     public BluetoothManager getManager() 
     {
     	return mBluetoothManager; 
@@ -80,6 +94,12 @@ public class EscucharIbeacons {
 	}    
 
 	
+	public ListaIbeacon getIbeacons() {
+		return ibeacons;
+	}
+	public void setIbeacons(ListaIbeacon ibeacons) {
+		this.ibeacons = ibeacons;
+	}
 	/* before any action check if BT is turned ON and enabled for us 
 	 * call this in onResume to be always sure that BT is ON when Your
 	 * application is put into the foreground */
@@ -167,17 +187,34 @@ public class EscucharIbeacons {
         @Override
         public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
         	// en cada lectura guardo el rssi y todos los parametros del ibeacon
-        	Ibeacon ibeacon= new Ibeacon("",0);
+            
         	ibeacon.setValor_nombre(device.getName());
         	ibeacon.setValorRssi(rssi);
         	ibeacon.setScanRecord(scanRecord);
-        	ibeacons.add(ibeacon);
+        	valor_rssi=rssi;
+        	
+        	//ibeacons.add(ibeacon);
         	
     		
         }
     };
     
+    public Ibeacon darIbeacon(){
+    	
+    	return ibeacon;
+    }
     
-   
+    public void calibrar(){
+    	ibeacon.setCalibracion(ibeacon.darValorRssi());
+    }
+    public boolean estaCerca(){
+    	return ibeacon.clienteCerca();
+    }
+   public String  darNombreBeacon(){
+	   return ibeacon.getProximityUuid();
+   }
+   public int getRssi(){
+	   return valor_rssi;
+   }
     
 }

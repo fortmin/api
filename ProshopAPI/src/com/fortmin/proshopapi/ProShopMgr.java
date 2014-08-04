@@ -26,7 +26,9 @@ public class ProShopMgr {
 	public ProShopMgr(Context context) {
 		this.context = context;
 	}
-	
+	public ProShopMgr(){
+		
+	}
 	private void log(String logtxt) {
 		String mens = this.getClass().getName()+"->";
 		if (logtxt != null) mens = mens.concat("->"+logtxt);
@@ -129,6 +131,11 @@ public class ProShopMgr {
 		return nfcMgr.prepararMensNdefTel(numtel);
 	}
 	
+	public NdefMessage prepararMensNdefPropietario(String id) {
+				
+		ProShopNFCMgr nfcMgr = new ProShopNFCMgr();		
+		return nfcMgr.prepararMensNdefPropietario(id);
+	}
 	/* 
 	 * Preparar mensaje NDEF para SMS (nfclab.com:smsService:)
 	 */
@@ -148,6 +155,12 @@ public class ProShopMgr {
 		return nfcMgr.prepararMensNdefExternalType(tipo,datos);
 	}
 	
+	public String id_tag_leido(Intent intent){
+		String id_tag=null;
+		ProShopNFCMgr nfcMgr = new ProShopNFCMgr();
+		id_tag= nfcMgr.nombreTagRecibido(intent);
+		return id_tag;
+	}
 	/* --------------------------------------------------------------------------------------------
 	 * ***************** FUNCIONES BLUETOOTH Y BLUETOOTH LOW ENERGY *******************************
 	 * -------------------------------------------------------------------------------------------- 

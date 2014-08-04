@@ -92,7 +92,7 @@ public ArrayList<Ibeacon> IbeaconsEncendidos(){
 	int indice=0;
 	ArrayList<Ibeacon> beacons= new ArrayList<Ibeacon>();
 	while (indice<=elementos){
-		if(listaBeacons.get(indice).clienteCerca())
+		//if(listaBeacons.get(indice).clienteCerca())
 			beacons.add(listaBeacons.get(indice));
 		indice++;    
 	}

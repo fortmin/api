@@ -5,6 +5,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 
+import com.fortmin.proshopapi.ProShopMgr;
+
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -19,13 +21,15 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
 import android.os.Build;
+import android.os.Parcelable;
 import android.util.Log;
 
 public class ProShopNFCMgr {
 	
 	private final String TAG = "PSHAPI";	
+	private String tag_recibido;
 	
-	private void log(String logtxt) {
+    private void log(String logtxt) {
 		String mens = this.getClass().getName()+"->";
 		if (logtxt != null) mens = mens.concat("->"+logtxt);
 		Log.i(TAG,mens);
@@ -217,6 +221,18 @@ public class ProShopNFCMgr {
         nMessage= new NdefMessage(new NdefRecord[] { URIRecord });
 		return nMessage;
 	}
+	/* 
+	 * Preparar mensaje NDEF para grabar (tipo propietario)	 */
+	  public NdefMessage prepararMensNdefPropietario(String identificador) {
+		log("");
+		NdefMessage nMessage = null;
+		String externalType = "com.fortmin.proshopping:Shopping";
+		String id = identificador;
+		NdefRecord extRecord1 = new NdefRecord(NdefRecord.TNF_EXTERNAL_TYPE, externalType.getBytes(), new byte[0], id.getBytes());
+	    nMessage = new NdefMessage(new NdefRecord[] { extRecord1});
+       
+		return nMessage;
+	}
 	
 	/* 
 	 * Preparar mensaje NDEF para SMS (sms:)
@@ -246,5 +262,54 @@ public class ProShopNFCMgr {
 		nMessage = new NdefMessage(new NdefRecord[] { registro });
 		return nMessage;
 	}
+	private String escucharTag(Intent intent){
+		   String tag_leido=null;
+			NdefMessage[] messages = getNdefMessages(intent);
+			for (int i = 0; i < messages.length; i++) {
+				for (int j = 0; j < messages[0].getRecords().length; j++) {
+					NdefRecord record = messages[i].getRecords()[j];
+					String payload = new String(record.getPayload(), 0,
+							record.getPayload().length,
+							Charset.forName("UTF-8"));
+					String delimiter = ":";
+					String[] temp = payload.split(delimiter);
+					tag_leido= temp[0];
+					// analizar si es de estacionamiento de paquetes o de imagenes
+					
+				}
+
+			}
+			return tag_leido;
+
+		}
+	
+	
+	private NdefMessage[] getNdefMessages(Intent intent) {
+		NdefMessage[] message = null;
+		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+			Parcelable[] rawMessages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+			if (rawMessages != null) {
+				message = new NdefMessage[rawMessages.length];
+				for (int i = 0; i < rawMessages.length; i++) {
+					message[i] = (NdefMessage) rawMessages[i];
+				}
+			} else {
+				byte[] empty = new byte[] {};
+				NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN,
+						empty, empty, empty);
+				NdefMessage msg = new NdefMessage(new NdefRecord[] { record });
+				message = new NdefMessage[] { msg };
+			}
+		} else {
+
+			
+		}
+		return message;
+	}
+	
+public String nombreTagRecibido(Intent intent){
+	return escucharTag(intent);
+	
+}
 	
 }

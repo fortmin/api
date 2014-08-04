@@ -56,7 +56,7 @@ public void setScanRecord(byte[] scanRecord) {
 	this.proximityUuid=uuid.toString();
 }
 
-Ibeacon(String nombre, int v_rssi){
+public Ibeacon(String nombre, int v_rssi){
 	  valor_nombre=nombre;
 	  this.rssi=v_rssi;
 	  this.calibrado=false;
