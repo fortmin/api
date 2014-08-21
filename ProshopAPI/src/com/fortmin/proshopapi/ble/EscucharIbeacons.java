@@ -20,6 +20,7 @@ public class EscucharIbeacons {
     private boolean mTimerEnabled = false;
     private int valor_rssi;
     private ListaIbeacon ibeacons;
+    private boolean esta_recibiendo=false;
     private Ibeacon ibeacon;
 	/* updated de RSSI en milisegundos*/
     private static final int RSSI_UPDATE_TIME_INTERVAL = 15000; // 15 seconds
@@ -192,7 +193,7 @@ public class EscucharIbeacons {
         	ibeacon.setValorRssi(rssi);
         	ibeacon.setScanRecord(scanRecord);
         	valor_rssi=rssi;
-        	
+        	esta_recibiendo=true;
         	//ibeacons.add(ibeacon);
         	
     		
@@ -216,5 +217,11 @@ public class EscucharIbeacons {
    public int getRssi(){
 	   return valor_rssi;
    }
+public boolean getEsta_recibiendo() {
+	return esta_recibiendo;
+}
+public void setEsta_recibiendo(boolean esta_recibiendo) {
+	this.esta_recibiendo = esta_recibiendo;
+}
     
 }
