@@ -3,15 +3,33 @@ package com.fortmin.proshopapi.ble;
 import java.util.UUID;
 
 public class Ibeacon {
+
 	private String valor_nombre;
-	private int rssi, rssi_metro;
+	private int rssi;
 	private byte[] scanRecord;
-	private int major, minor;
+	private int major;
+	private int minor;
 	double txPower;
 	private String proximityUuid;
 	private boolean calibrado;
 	private int distancia;
-	private final int startByte = 2;// para obtener los valores de major y minor
+	// Posicion de comienzo dentro del scanRecord para obtener
+	// los valores de major, minor y txPower
+	private final int startByte = 2;
+
+	public Ibeacon(String nombre, int v_rssi) {
+		valor_nombre = nombre;
+		this.rssi = v_rssi;
+		this.calibrado = false;
+	}
+
+	public String getValor_nombre() {
+		return valor_nombre;
+	}
+
+	public void setValor_nombre(String valor_nombre) {
+		this.valor_nombre = valor_nombre;
+	}
 
 	public int getRssi() {
 		return rssi;
@@ -23,7 +41,6 @@ public class Ibeacon {
 
 	public byte[] getScanRecord() {
 		return scanRecord;
-
 	}
 
 	public void setScanRecord(byte[] scanRecord) {
@@ -51,34 +68,6 @@ public class Ibeacon {
 		this.proximityUuid = uuid.toString();
 	}
 
-	public Ibeacon(String nombre, int v_rssi) {
-		valor_nombre = nombre;
-		this.rssi = v_rssi;
-		this.calibrado = false;
-
-	}
-
-	public String getValor_rssi() {
-		return String.valueOf(rssi);
-	}
-
-	public String getValor_nombre() {
-		return valor_nombre;
-	}
-
-	public void setValor_nombre(String valor_nombre) {
-		this.valor_nombre = valor_nombre;
-	}
-
-	public int darValorRssi() {
-		return rssi;
-	}
-
-	public void setValorRssi(int valor) {
-		rssi = valor;
-
-	}
-
 	public int getMajor() {
 		return major;
 	}
@@ -103,39 +92,45 @@ public class Ibeacon {
 		this.proximityUuid = proximityUuid;
 	}
 
-	public void setCalibracion(int rssi_ibeacon) {
-		// potencia es el valor de rssi captado por el movil a la distancia de 1
-		// metro
-		// rssi_ibeacon es el rssi que tiene el dispositivo que transmite
-
-		this.distancia = Math.abs(rssi_ibeacon);// tomo como referencia el rssi
-												// a la distancia requerida
-		this.calibrado = true;
-		// this.ni=(float) ((-rssi_ibeacon-rssi_metro)/(10*Math.log10(A)));
-
-	}
-
-	public float getDistancia() {
-
-		return distancia;
-	}
-
 	public boolean estaCalibrado() {
 		return this.calibrado;
 	}
 
+	public float getDistancia() {
+		return distancia;
+	}
+
+	public String getValor_rssi() {
+		return String.valueOf(rssi);
+	}
+
+	public int darValorRssi() {
+		return rssi;
+	}
+
+	public void setValorRssi(int valor) {
+		rssi = valor;
+	}
+
+	public void setCalibracion(int rssi_ibeacon) {
+		// potencia es el valor de rssi captado por el movil a la distancia de 1
+		// metro
+		// rssi_ibeacon es el rssi que tiene el dispositivo que transmite
+		// tomo como referencia el rss a la distancia requerida
+		this.distancia = Math.abs(rssi_ibeacon);
+		this.calibrado = true;
+		// this.ni=(float) ((-rssi_ibeacon-rssi_metro)/(10*Math.log10(A)));
+	}
+
 	public boolean clienteCerca() {
 		double diferencia = Math.abs(rssi) - distancia;
-
 		if (diferencia > 2)
 			return false;
 		else
 			return true;
-
 	}
 
 	public double calculateAccuracy() {
-
 		double txPower = -95;
 		double ratio = rssi * 1.0 / txPower;
 		if (ratio < 1.0) {

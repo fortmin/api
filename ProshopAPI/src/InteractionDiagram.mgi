@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <CommunicationClass name="com.fortmin.proshopapi.ProShopMgr" x="213" y="25">
+        <Communication destinationClassName="com.fortmin.proshopapi.ble.ProShopBleMgr"/>
+        <Communication destinationClassName="com.fortmin.proshopapi.nfc.ProShopNFCMgr"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.fortmin.proshopapi.ble.ProShopBleMgr"
+        x="325" y="303"/>
+    <CommunicationClass
+        name="com.fortmin.proshopapi.ble.EscucharIbeacons" x="675" y="21">
+        <Association
+            destinationClassName="com.fortmin.proshopapi.ble.ListaIbeacon"
+            endpointName="ibeacons" kind="Simple"/>
+        <Association
+            destinationClassName="com.fortmin.proshopapi.ble.Ibeacon"
+            endpointName="ibeacon" kind="Simple"/>
+        <Communication destinationClassName="com.fortmin.proshopapi.ble.ListaIbeacon"/>
+        <Communication destinationClassName="com.fortmin.proshopapi.ble.Ibeacon"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.fortmin.proshopapi.nfc.ProShopNFCMgr"
+        x="59" y="306"/>
+    <CommunicationClass name="com.fortmin.proshopapi.ble.ListaIbeacon"
+        x="766" y="253">
+        <Association
+            destinationClassName="com.fortmin.proshopapi.ble.Ibeacon"
+            endpointName="listaBeacons" kind="Simple"/>
+        <Communication destinationClassName="com.fortmin.proshopapi.ble.Ibeacon"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.fortmin.proshopapi.ble.Ibeacon"
+        x="508" y="300"/>
+</ClassDiagram>

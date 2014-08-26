@@ -25,7 +25,6 @@ import android.util.Log;
 public class ProShopNFCMgr {
 
 	private final String TAG = "PSHAPI";
-	private String tag_recibido;
 
 	private void log(String logtxt) {
 		String mens = this.getClass().getName() + "->";
