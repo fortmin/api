@@ -1,17 +1,14 @@
 package com.fortmin.proshopapi;
 
-import java.net.URISyntaxException;
-
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
-import android.content.Intent;
-import android.nfc.NdefMessage;
-import android.nfc.Tag;
+import android.content.pm.PackageManager;
+import android.nfc.NfcAdapter;
+import android.nfc.NfcManager;
 import android.util.Log;
 
-import com.fortmin.proshopapi.ble.EscucharIbeacons;
 import com.fortmin.proshopapi.ble.ProShopBleMgr;
 import com.fortmin.proshopapi.nfc.ProShopNFCMgr;
 
@@ -40,29 +37,12 @@ public class ProShopMgr {
 	}
 
 	/*
-	 * --------------------------------------------------------------------------
-	 * ------------------ ***************** FUNCIONES NEAR FIELD COMMUNICATIONS
-	 * **************************************
-	 * ------------------------------------
-	 * --------------------------------------------------------
-	 */
-
-	/*
 	 * Averiguo si el celular tiene soporte NFC
 	 */
 	public boolean soportaNFC() {
 		log("soportaNFC");
-		ProShopNFCMgr nfcMgr = new ProShopNFCMgr();
-		return nfcMgr.soportaNFC(context);
-	}
-
-	/*
-	 * Averiguo si el celular tiene soporte NFC Host Card Emulation
-	 */
-	public boolean soportaNFCHce() {
-		log("soportaNFCHce");
-		ProShopNFCMgr nfcMgr = new ProShopNFCMgr();
-		return nfcMgr.soportaNFCHce(context);
+		PackageManager pckMgr = context.getPackageManager();
+		return pckMgr.hasSystemFeature(PackageManager.FEATURE_NFC);
 	}
 
 	/*
@@ -70,125 +50,39 @@ public class ProShopMgr {
 	 */
 	public boolean nfcHabilitado() {
 		log("nfcHabilitado");
-		ProShopNFCMgr nfcMgr = new ProShopNFCMgr();
-		return nfcMgr.nfcHabilitado(context);
+		boolean habilitado = false;
+		if (soportaNFC()) {
+			NfcManager nfcMgr = (NfcManager) context
+					.getSystemService(Context.NFC_SERVICE);
+			if (nfcMgr != null) {
+				NfcAdapter nfcAdapter = nfcMgr.getDefaultAdapter();
+				if (nfcAdapter != null) {
+					habilitado = nfcAdapter.isEnabled();
+				}
+			}
+		}
+		return habilitado;
 	}
 
 	/*
-	 * Habilita la escucha del Tag para escritura o grabacion del mismo
+	 * Devuelve el entorno NFC
 	 */
-	public boolean escucharTagNdefGrabar(Activity activity, Context context,
-			Object clase) {
-		log("escucharTagNdefGrabar");
-		ProShopNFCMgr nfcMgr = new ProShopNFCMgr();
-		return nfcMgr.escucharTagNdefEscribir(activity, context, clase);
+	public ProShopNFCMgr getNFC() {
+		log("getNFC");
+		ProShopNFCMgr psNfc = new ProShopNFCMgr(soportaNFC(), nfcHabilitado(),
+				context);
+		return psNfc;
 	}
 
 	/*
-	 * Deshabilita la escucha del Tag para escritura o grabacion del mismo
+	 * Devuelve el entorno BLE
 	 */
-	public void noEscucharTagNdefGrabar(Activity activity, Context context) {
-		log("noEscucharTagNdefGrabar");
-		ProShopNFCMgr nfcMgr = new ProShopNFCMgr();
-		nfcMgr.noEscucharTagNdefGrabar(activity, context);
-	}
-
-	/*
-	 * Escribe el mensaje NDEF en el Tag detectado
-	 */
-	public String escribirNdefMessageToTag(NdefMessage message, Tag detectedTag) {
-		log("escribirNdefMessageToTag");
-		ProShopNFCMgr nfcMgr = new ProShopNFCMgr();
-		return nfcMgr.escribirNdefMessageToTag(message, detectedTag);
-	}
-
-	/*
-	 * Obtiene el Tag descubierto a partir del Intent
-	 */
-	public Tag obtenerTagDescubierto(Intent intent) {
-		log("obtenerTagDescubierto");
-		ProShopNFCMgr nfcMgr = new ProShopNFCMgr();
-		return nfcMgr.obtenerTagDescubierto(intent);
-	}
-
-	/*
-	 * Preparar mensaje NDEF para URL Devuelve la excepcion URISyntaxException
-	 * si la url no esta bien formada
-	 */
-	public NdefMessage prepararMensNdefUrl(String url)
-			throws URISyntaxException {
-		log("prepararMensNdefUrl");
-		ProShopNFCMgr nfcMgr = new ProShopNFCMgr();
-		return nfcMgr.prepararMensNdefUrl(url);
-	}
-
-	/*
-	 * Preparar mensaje NDEF para email (mailto:)
-	 */
-	public NdefMessage prepararMensNdefMailto(String mail, String subject,
-			String body) {
-		log("prepararMensNdefMailto");
-		ProShopNFCMgr nfcMgr = new ProShopNFCMgr();
-		return nfcMgr.prepararMensNdefMailto(mail, subject, body);
-	}
-
-	/*
-	 * Preparar mensaje NDEF para telefono (tel:)
-	 */
-	public NdefMessage prepararMensNdefTel(String numtel) {
-		log("prepararMensNdefTel");
-		ProShopNFCMgr nfcMgr = new ProShopNFCMgr();
-		return nfcMgr.prepararMensNdefTel(numtel);
-	}
-
-	public NdefMessage prepararMensNdefPropietario(String id) {
-
-		ProShopNFCMgr nfcMgr = new ProShopNFCMgr();
-		return nfcMgr.prepararMensNdefPropietario(id);
-	}
-
-	/*
-	 * Preparar mensaje NDEF para SMS (nfclab.com:smsService:)
-	 */
-	public NdefMessage prepararMensNdefSMS(String numtel, String body) {
-		log("prepararMensNdefSMS");
-		ProShopNFCMgr nfcMgr = new ProShopNFCMgr();
-		return nfcMgr.prepararMensNdefSMS(numtel, body);
-	}
-
-	/*
-	 * Preparar mensaje NDEF para tipo EXTERNAL_TYPE Ejemplo de tipo:
-	 * "nfclab.com:smsService"
-	 */
-	public NdefMessage prepararMensNdefExternalType(String tipo, String datos) {
-		log("prepararMensNdefExternalType");
-		ProShopNFCMgr nfcMgr = new ProShopNFCMgr();
-		return nfcMgr.prepararMensNdefExternalType(tipo, datos);
-	}
-
-	public String id_tag_leido(Intent intent) {
-		String id_tag = null;
-		ProShopNFCMgr nfcMgr = new ProShopNFCMgr();
-		id_tag = nfcMgr.nombreTagRecibido(intent);
-		return id_tag;
-	}
-
-	/*
-	 * --------------------------------------------------------------------------
-	 * ------------------ ***************** FUNCIONES BLUETOOTH Y BLUETOOTH LOW
-	 * ENERGY *******************************
-	 * ------------------------------------
-	 * --------------------------------------------------------
-	 */
-
-	/*
-	 * Averiguo si el celular es capaz de comunicarse con dispositivos Bluetooth
-	 * Low Energy
-	 */
-	public boolean bleSoportado(Activity activity) {
-		log("bleSoportado");
-		ProShopBleMgr bleMgr = new ProShopBleMgr();
-		return bleMgr.bleSoportado(activity);
+	public ProShopBleMgr getBLE(Activity activity) {
+		log("getBLE");
+		ProShopBleMgr psBle = new ProShopBleMgr(bluetoothSoportado(),
+				bluetoothHabilitado(activity), getBluetoothManager(activity),
+				getBluetoothAdapter(getBluetoothManager(activity)));
+		return psBle;
 	}
 
 	/*
@@ -196,8 +90,8 @@ public class ProShopMgr {
 	 */
 	public BluetoothManager getBluetoothManager(Activity activity) {
 		log("getBluetoothManager");
-		ProShopBleMgr bleMgr = new ProShopBleMgr();
-		return bleMgr.getBluetoothManager(activity);
+		return (BluetoothManager) activity
+				.getSystemService(Context.BLUETOOTH_SERVICE);
 	}
 
 	/*
@@ -205,8 +99,7 @@ public class ProShopMgr {
 	 */
 	public BluetoothAdapter getBluetoothAdapter(BluetoothManager manager) {
 		log("getBluetoothAdapter");
-		ProShopBleMgr bleMgr = new ProShopBleMgr();
-		return bleMgr.getBluetoothAdapter(manager);
+		return (BluetoothAdapter) manager.getAdapter();
 	}
 
 	/*
@@ -214,8 +107,8 @@ public class ProShopMgr {
 	 */
 	public boolean bluetoothSoportado() {
 		log("bluetoothSoportado");
-		ProShopBleMgr bleMgr = new ProShopBleMgr();
-		return bleMgr.bluetoothSoportado(context);
+		PackageManager pckMgr = context.getPackageManager();
+		return pckMgr.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH);
 	}
 
 	/*
@@ -223,14 +116,17 @@ public class ProShopMgr {
 	 */
 	public boolean bluetoothHabilitado(Activity activity) {
 		log("bluetoothHabilitado");
-		ProShopBleMgr bleMgr = new ProShopBleMgr();
-		return bleMgr.bluetoothHabilitado(activity);
-	}
-
-	public EscucharIbeacons inicializarBLE(Activity activity) {
-		log("inicializarBLE");
-		ProShopBleMgr bleMgr = new ProShopBleMgr();
-		return bleMgr.inicializarBLE(activity);
+		boolean habilitado = false;
+		if (bluetoothSoportado()) {
+			BluetoothManager btMgr = this.getBluetoothManager(activity);
+			if (btMgr != null) {
+				BluetoothAdapter btAdapter = this.getBluetoothAdapter(btMgr);
+				if (btAdapter != null) {
+					habilitado = btAdapter.isEnabled();
+				}
+			}
+		}
+		return habilitado;
 	}
 
 	/*

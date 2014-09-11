@@ -14,7 +14,6 @@ import android.content.pm.PackageManager;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
-import android.nfc.NfcManager;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
@@ -25,6 +24,18 @@ import android.util.Log;
 public class ProShopNFCMgr {
 
 	private final String TAG = "PSHAPI";
+	private boolean soportaNFC;
+	private boolean nfcHabilitado;
+	NfcAdapter mNfcAdapter;
+	private Context context;
+
+	public ProShopNFCMgr(boolean soportaNFC, boolean nfcHabilitado,
+			Context context) {
+		this.soportaNFC = soportaNFC;
+		this.nfcHabilitado = nfcHabilitado;
+		this.context = context;
+		mNfcAdapter = NfcAdapter.getDefaultAdapter(context);
+	}
 
 	private void log(String logtxt) {
 		String mens = this.getClass().getName() + "->";
@@ -34,56 +45,28 @@ public class ProShopNFCMgr {
 	}
 
 	/*
-	 * Averiguo si el celular tiene soporte NFC
-	 */
-	public boolean soportaNFC(Context context) {
-		log("soportaNFC");
-		PackageManager pckMgr = context.getPackageManager();
-		return pckMgr.hasSystemFeature(PackageManager.FEATURE_NFC);
-	}
-
-	/*
 	 * Averiguo si el celular tiene soporte NFC Host Card Emulation
 	 */
 	public boolean soportaNFCHce(Context context) {
 		log("soportaNFCHce");
 		boolean soporta = false;
-		PackageManager pckMgr = context.getPackageManager();
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-			soporta = pckMgr
-					.hasSystemFeature(PackageManager.FEATURE_NFC_HOST_CARD_EMULATION);
+		if (soportaNFC) {
+			PackageManager pckMgr = context.getPackageManager();
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+				soporta = pckMgr
+						.hasSystemFeature(PackageManager.FEATURE_NFC_HOST_CARD_EMULATION);
+			}
 		}
 		return soporta;
 	}
 
 	/*
-	 * Chequear si el NFC se encuentra habilitado en este momento
-	 */
-	public boolean nfcHabilitado(Context context) {
-		log("nfcHabilitado");
-		boolean habilitado = false;
-		if (soportaNFC(context)) {
-			NfcManager nfcMgr = (NfcManager) context
-					.getSystemService(Context.NFC_SERVICE);
-			if (nfcMgr != null) {
-				NfcAdapter nfcAdapter = nfcMgr.getDefaultAdapter();
-				if (nfcAdapter != null) {
-					habilitado = nfcAdapter.isEnabled();
-				}
-			}
-		}
-		return habilitado;
-	}
-
-	/*
 	 * Habilita la escucha del Tag para escritura o grabacion del mismo
 	 */
-	public boolean escucharTagNdefEscribir(Activity activity, Context context,
-			Object clase) {
+	public boolean escucharTagNdefEscribir(Activity activity, Object clase) {
 		log("escucharTagNdefEscribir");
 		boolean result = false;
-		if (nfcHabilitado(context)) {
-			NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(context);
+		if (nfcHabilitado) {
 			if (mNfcAdapter != null) {
 				log("enableForegroundDispatch");
 				PendingIntent mPendingIntent = PendingIntent.getActivity(
@@ -106,10 +89,9 @@ public class ProShopNFCMgr {
 	/*
 	 * Deshabilita la escucha del Tag para escritura o grabacion del mismo
 	 */
-	public void noEscucharTagNdefGrabar(Activity activity, Context context) {
+	public void noEscucharTagNdefGrabar(Activity activity) {
 		log("noEscucharTagNdefGrabar");
-		if (nfcHabilitado(context)) {
-			NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(context);
+		if (nfcHabilitado) {
 			if (mNfcAdapter != null) {
 				log("enableForegroundDispatch");
 				mNfcAdapter.disableForegroundDispatch(activity);
