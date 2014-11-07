@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<PackageAnalysis>
-    <Package name="com.fortmin.proshopapi" x="209" y="126">
-        <DependencyLink destination="com.fortmin.proshopapi.nfc"/>
-        <DependencyLink destination="com.fortmin.proshopapi.ble"/>
-    </Package>
-    <Package name="com.fortmin.proshopapi.ble" x="96" y="198"/>
-    <Package name="com.fortmin.proshopapi.nfc" x="320" y="199"/>
-</PackageAnalysis>

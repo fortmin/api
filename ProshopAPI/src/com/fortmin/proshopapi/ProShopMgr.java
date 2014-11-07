@@ -26,6 +26,7 @@ public class ProShopMgr {
 	}
 
 	public ProShopMgr() {
+
 	}
 
 	private void log(String logtxt) {

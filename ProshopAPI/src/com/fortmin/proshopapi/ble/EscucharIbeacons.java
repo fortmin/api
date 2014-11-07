@@ -20,7 +20,7 @@ public class EscucharIbeacons {
 	private boolean esta_recibiendo = false;
 	private Ibeacon ibeacon;
 	/* updated de RSSI en milisegundos */
-	private static final int RSSI_UPDATE_TIME_INTERVAL = 15000; // 15 seconds
+	private static final int RSSI_UPDATE_TIME_INTERVAL = 1000; // 1 seconds
 
 	/* callback object through which we are returning results to the caller */
 	private BleWrapperUiCallbacks mUiCallback = null;
